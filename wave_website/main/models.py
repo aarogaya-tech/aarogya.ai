@@ -10,8 +10,8 @@ class Patient(models.Model):
     def __to_dict__(self):
         return {'full_name': self.full_name, 'id': self.id}
 
-    # def __str__(self):
-    #     return self.full_name
+    def __str__(self):
+        return self.full_name
 
 class Session(models.Model):
     session_date = models.DateField()
@@ -19,7 +19,9 @@ class Session(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+
 class Transcript(models.Model):
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     audio_file_url = models.CharField(max_length=255)
     text_file_url = models.CharField(max_length=255)
+
