@@ -25,10 +25,14 @@
                         <div class="card-text">
                             Session Date: {{ session.session_date }}<br>
                             Session Time: {{ session.session_time }}
-                            <h5>Transcripts</h5>
-                            {% for transcript in session.transcripts %}
-                                <p>Transript Text: {{ transcript.text_file_url }}</p>
-                            {% endfor %}
+                            {% if session.transcripts %}
+                                <h5>Transcript</h5>
+                                {% for transcript in session.transcripts %}
+                                    <p>Transript Text: {{ transcript.content }}</p>
+                                {% endfor %}
+                            {% else %}
+                            <p>Transcripts not available.</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

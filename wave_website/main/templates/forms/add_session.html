@@ -2,7 +2,7 @@
 {% block title %}Add Session{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}{{session_form|crispy}}
     <h5 class="text-info">Transcript</h5>
     <div>{{ transcript_form|crispy }}</div>

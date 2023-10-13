@@ -36,6 +36,8 @@ def client_detail(request, client_id: int):
         sessions = client.session_set.all()
         for session in sessions:
             session.transcripts = session.transcript_set.all()
+            for transcript in session.transcripts:
+                transcript.content = transcript.text_file_url.file.read().decode('utf-8')
     except Patient.DoesNotExist:
         raise Http404("Patient does not exist.")
 
@@ -46,8 +48,9 @@ def client_detail(request, client_id: int):
 def new_client_session(request):
     if request.method == "POST":
         session_form = SessionForm(request.POST)
-        transcript_form = TranscriptForm(request.POST)
+        transcript_form = TranscriptForm(request.POST, request.FILES)
         if session_form.is_valid() and transcript_form.is_valid():
+            print("Here")
             session_form.instance.user = request.user
             client_session = session_form.save(commit=False)
             client_session.save()

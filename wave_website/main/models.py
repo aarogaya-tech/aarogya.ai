@@ -21,8 +21,13 @@ class Session(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+def transcript_file_upload(instance, filename):
+    ext = filename.rsplit('.', 1)[-1]
+    filename = f'Patient-{instance.session.patient.id}-Session-{instance.session.session_date.strftime("%Y%m%d")}-{instance.session.session_time.strftime("%H%M")}-Transcript'
+    full_upload_path = f"transcripts/{filename}.{ext}"
+    return full_upload_path
+
+
 class Transcript(models.Model):
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    audio_file_url = models.CharField(max_length=255)
-    text_file_url = models.CharField(max_length=255)
-
+    text_file_url = models.FileField(upload_to=transcript_file_upload)

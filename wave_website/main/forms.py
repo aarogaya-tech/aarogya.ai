@@ -46,4 +46,4 @@ class SessionForm(forms.ModelForm):
 class TranscriptForm(forms.ModelForm):
     class Meta:
         model = Transcript
-        fields = ["audio_file_url", "text_file_url"]
+        fields = ["text_file_url"]
