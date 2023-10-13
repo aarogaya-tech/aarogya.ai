@@ -21,9 +21,20 @@ class Session(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+class SessionNote(models.Model):
+    repeated_lines = models.CharField(max_length=1000)
+    psychologists_notes = models.CharField(max_length=1000)
+    summary = models.CharField(max_length=1000)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+
+
 def transcript_file_upload(instance, filename):
     ext = filename.rsplit('.', 1)[-1]
-    filename = f'Patient-{instance.session.patient.id}-Session-{instance.session.session_date.strftime("%Y%m%d")}-{instance.session.session_time.strftime("%H%M")}-Transcript'
+    filename = f'Patient-{instance.session.patient.id}\
+        -Session-{instance.session.session_date.strftime("%Y%m%d")}\
+        -{instance.session.session_time.strftime("%H%M")}-Transcript'
+
     full_upload_path = f"transcripts/{filename}.{ext}"
     return full_upload_path
 
