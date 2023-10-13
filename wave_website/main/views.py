@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, PatientForm, SessionForm, TranscriptForm
-from .models import Patient, Session
-from django.contrib.auth import login, logout, authenticate
+from .forms import RegisterForm, PatientForm, SessionForm, SessionNotesForm, TranscriptForm
+from .models import Patient, Session, SessionNote
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.urls import reverse
-
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -31,6 +30,20 @@ def clients(request):
 
 @login_required
 def client_detail(request, client_id: int, session_id=None):
+    if request.method == "POST":
+        session_notes_form = SessionNotesForm(request.POST)
+        if session_notes_form.is_valid():
+            SessionNote.objects.create(
+                **session_notes_form.cleaned_data, 
+                **{
+                    "session": Session.objects.get(id=session_id),
+                    "user": request.user
+                }
+            )
+            return redirect(
+                reverse("client-detail-with-transcript", kwargs={"client_id": client_id, "session_id": session_id})
+            )
+
     try:
         client = Patient.objects.get(pk=client_id)
         logged_in_user = User.objects.get(username=request.user)
@@ -39,9 +52,20 @@ def client_detail(request, client_id: int, session_id=None):
 
         sessions = client.session_set.all()
         transcript = None
+        session_notes_form = SessionNotesForm()
         session = None
+        note = None
         if session_id is not None:
             session = Session.objects.get(id=session_id)
+            try:
+                note = None if SessionNote.objects.count() == 0 \
+                    else SessionNote.objects.get(session=session)
+            except SessionNote.DoesNotExist:
+                note = None
+            print(note)
+            if note:
+                session_notes_form = SessionNotesForm(instance=note)
+
             if session.id == session_id:
                 if session.user.username != logged_in_user.username:
                     raise Exception("User not authorized to access session")
@@ -51,7 +75,18 @@ def client_detail(request, client_id: int, session_id=None):
     except Patient.DoesNotExist:
         raise Http404("Patient does not exist.")
 
-    return render(request, "main/client_detail.html", {"client": client, 'sessions': sessions, 'transcript': transcript, 'session': session })
+    return render(
+        request,
+        "main/client_detail.html", 
+        {
+            "client": client,
+            "sessions": sessions,
+            "transcript": transcript,
+            "session": session,
+            "session_notes": session_notes_form,
+            "notes": note
+        }
+    )
 
 
 @login_required

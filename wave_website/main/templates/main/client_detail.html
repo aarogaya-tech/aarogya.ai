@@ -41,7 +41,13 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col-3"><p>hello</p></div>
+            <div class="col-3">
+                {% load crispy_forms_tags %}
+                <form method="post">
+                    {% csrf_token %}{{session_notes|crispy}}
+                    <button type="submit" class="btn btn-success">Save</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

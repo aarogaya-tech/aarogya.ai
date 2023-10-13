@@ -41,10 +41,10 @@ class SessionForm(forms.ModelForm):
         }
 
 
-class SessionNotes(forms.Form):
-    repeated_lines = forms.CharField(widget=forms.Textarea, label="Repeated Lines")
-    psychologists_notes = forms.CharField(widget=forms.Textarea, label="Psychologist's Notes")
-    summary = forms.CharField(widget=forms.Textarea, label="Summary")
+class SessionNotesForm(forms.ModelForm):
+    repeated_lines = forms.CharField(widget=forms.Textarea(attrs={'rows': 2}), label="Repeated Lines")
+    psychologists_notes = forms.CharField(widget=forms.Textarea(attrs={'rows': 2}), label="Psychologist's Notes")
+    summary = forms.CharField(widget=forms.Textarea(attrs={'rows': 2}), label="Summary")
 
     class Meta:
         model = SessionNote
