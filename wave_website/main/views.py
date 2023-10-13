@@ -33,6 +33,9 @@ def clients(request):
 def client_detail(request, client_id: int):
     try:
         client = Patient.objects.get(pk=client_id)
+        logged_in_user = User.objects.get(username=request.user)
+        if client.user.username != logged_in_user.username:
+            raise Exception("User not authorized to access client")
         sessions = client.session_set.all()
         for session in sessions:
             session.transcripts = session.transcript_set.all()
