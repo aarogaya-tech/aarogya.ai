@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Patient, Session, Transcript
+from .models import Patient, Session, Transcript, SessionNote
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -40,6 +40,15 @@ class SessionForm(forms.ModelForm):
             "session_time": forms.TimeInput(attrs={"type": "time"}),
         }
 
+
+class SessionNotes(forms.Form):
+    repeated_lines = forms.CharField(widget=forms.Textarea, label="Repeated Lines")
+    psychologists_notes = forms.CharField(widget=forms.Textarea, label="Psychologist's Notes")
+    summary = forms.CharField(widget=forms.Textarea, label="Summary")
+
+    class Meta:
+        model = SessionNote
+        fields = ["repeated_lines", "psychologists_notes", "summary"]
 
 class TranscriptForm(forms.ModelForm):
     class Meta:
