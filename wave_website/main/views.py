@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, PatientForm, SessionForm, TranscriptForm
-from .models import Patient
+from .models import Patient, Session
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -30,21 +30,28 @@ def clients(request):
 
 
 @login_required
-def client_detail(request, client_id: int):
+def client_detail(request, client_id: int, session_id=None):
     try:
         client = Patient.objects.get(pk=client_id)
         logged_in_user = User.objects.get(username=request.user)
         if client.user.username != logged_in_user.username:
             raise Exception("User not authorized to access client")
+
         sessions = client.session_set.all()
-        for session in sessions:
-            session.transcripts = session.transcript_set.all()
-            for transcript in session.transcripts:
+        transcript = None
+        session = None
+        if session_id is not None:
+            session = Session.objects.get(id=session_id)
+            if session.id == session_id:
+                if session.user.username != logged_in_user.username:
+                    raise Exception("User not authorized to access session")
+                transcript = session.transcript_set.all()[0]
                 transcript.content = transcript.text_file_url.file.read().decode('utf-8')
+
     except Patient.DoesNotExist:
         raise Http404("Patient does not exist.")
 
-    return render(request, "main/client_detail.html", {"client": client, 'sessions': sessions})
+    return render(request, "main/client_detail.html", {"client": client, 'sessions': sessions, 'transcript': transcript, 'session': session })
 
 
 @login_required

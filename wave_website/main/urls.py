@@ -9,4 +9,5 @@ urlpatterns = [
     path('new-client', views.new_client, name='new-client'),
     path('client/<int:client_id>', views.client_detail, name='client-detail'),
     path('client/<int:client_id>/session', views.new_client_session, name='new-session'),
+    path('client/<int:client_id>/session/<int:session_id>', views.client_detail, name='client-detail-with-transcript'),
 ]

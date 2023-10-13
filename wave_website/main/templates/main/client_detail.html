@@ -13,36 +13,36 @@
 
     <div class="container-fluid m-0 mt-3 p-0">
         <div class="row">
-            <div class="pt-3 pb-3 col-3">
+            <div class="pt-3 pb-3 col-2">
                 {% for session in sessions %}
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-title">
-                                <h5>
-                                    Session # {{ forloop.counter }}
-                                </h5>
+                    <a href={% url 'client-detail-with-transcript' client_id=client.id session_id=session.id %}>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h5>
+                                        Session # {{ forloop.counter }}
+                                    </h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 {% endfor %}
+                <a href="{% url 'new-session' client.id %}" class="btn btn-primary mt-3">Add new client session</a>
             </div>
-            <div class="pt-3 pb-3 col-6">
+            <div class="pt-3 pb-3 col-7">
                 <div class="card-text">
                     Session Date: {{ session.session_date }}<br>
                     Session Time: {{ session.session_time }}
-                    {% if session.transcripts %}
+                    {% if transcript %}
                         <h5>Transcript</h5>
-                        {% for transcript in session.transcripts %}
-                            <p>Transript Text: {{ transcript.content }}</p>
-                        {% endfor %}
+                        <p>{{ transcript.content }}</p>
                     {% else %}
                     <p>Transcripts not available.</p>
                     {% endif %}
                 </div>
             </div>
-            <div class="col-3"></div>
+            <div class="col-3"><p>hello</p></div>
         </div>
     </div>
-    <a href="{% url 'new-session' client.id %}" class="btn btn-primary mt-3">Add new client session</a>
 </div>
 {% endblock %}
