@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, PatientForm, SessionForm, SessionNotesForm, TranscriptForm
 from .models import Patient, Session, SessionNote
@@ -11,7 +12,48 @@ from django.contrib.auth.models import User
 
 @login_required()
 def home(request):
-    return render(request, "main/home.html")
+    all_clients = Patient.objects.filter(user=request.user)
+    all_sessions = Session.objects.filter(user=request.user)
+    today = []
+    upcoming = []
+    past = []
+
+    for session in all_sessions:
+        if session.session_date == datetime.today().date():
+            today.append({
+                "session_date": session.session_date,
+                "session_time": session.session_time,
+                "client_name": session.patient,
+                "client_id": session.__dict__['patient_id'],
+                "session_id": session.__dict__['id'],
+            })
+        elif session.session_date > datetime.today().date():
+            upcoming.append({
+                "session_date": session.session_date,
+                "session_time": session.session_time,
+                "client_name": session.patient,
+                "client_id": session.__dict__['patient_id'],
+                "session_id": session.__dict__['id'],
+            })
+        else:
+            past.append({
+                "session_date": session.session_date,
+                "session_time": session.session_time,
+                "client_name": session.patient,
+                "client_id": session.__dict__['patient_id'],
+                "session_id": session.__dict__['id'],
+            })
+
+    return render(
+        request,
+        "main/home.html", 
+        {
+            "clients": all_clients, 
+            "today_sessions": today,
+            "upcoming_sessions": upcoming,
+            "past_sessions": past 
+        }
+    )
 
 
 @login_required()

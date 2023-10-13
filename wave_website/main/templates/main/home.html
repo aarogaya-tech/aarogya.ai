@@ -1,5 +1,45 @@
 {% extends 'main/base.html' %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
-<h1>HELLO!</h1>
+<div class="container-fluid">
+    <div class="row gap-3">
+        <div class="col-2 mt-5">
+            <h5 class="mb-3">Clients</h5>
+            {% for client in clients %}
+                <a href="/client/{{ client.id }}">
+                    {{ client.full_name }}
+                </a>
+            {% endfor %}
+        </div>
+        <div class="col-9 mt-5">
+            <h5 class="mb-3">Sessions</h5>
+            <p class="text-muted">TODAY</p>
+            {% for session in today_sessions %}
+                <a href="client/{{session.client_id}}/session/{{session.session_id}}">
+                    {{ session.client_name }}
+                    {{ session.session_date }}
+                    {{ session.session_time }}
+                </a>
+            {% endfor %}
+            <p class="text-muted mt-5">UPCOMING</p>
+            {% for session in upcoming_sessions %}
+                <a href="client/{{session.client_id}}/session/{{session.session_id}}">
+                    {{ session.client_name }}
+                    {{ session.session_date }}
+                    {{ session.session_time }}
+                </a>
+            {% endfor %}
+            <p class="text-muted mt-5">PAST</p>
+            {% for session in past_sessions %}
+                <a href="client/{{session.client_id}}/session/{{session.session_id}}">
+                    <div class="card-body">
+                        {{ session.client_name }}
+                        {{ session.session_date }}
+                        {{ session.session_time }}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}
