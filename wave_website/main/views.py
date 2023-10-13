@@ -45,12 +45,11 @@ def client_detail(request, client_id: int):
 
 
 @login_required
-def new_client_session(request):
+def new_client_session(request, client_id: int):
     if request.method == "POST":
         session_form = SessionForm(request.POST)
         transcript_form = TranscriptForm(request.POST, request.FILES)
         if session_form.is_valid() and transcript_form.is_valid():
-            print("Here")
             session_form.instance.user = request.user
             client_session = session_form.save(commit=False)
             client_session.save()
@@ -61,6 +60,7 @@ def new_client_session(request):
             )
     else:
         session_form = SessionForm()
+        session_form.fields["patient"].queryset = Patient.objects.filter(id=client_id)
         transcript_form = TranscriptForm()
         return render(
             request,

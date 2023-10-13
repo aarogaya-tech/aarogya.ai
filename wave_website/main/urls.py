@@ -8,5 +8,5 @@ urlpatterns = [
     path('clients', views.clients, name='clients'),
     path('new-client', views.new_client, name='new-client'),
     path('client/<int:client_id>', views.client_detail, name='client-detail'),
-    path('new-session', views.new_client_session, name='new-client-session')
+    path('client/<int:client_id>/session', views.new_client_session, name='new-session'),
 ]
