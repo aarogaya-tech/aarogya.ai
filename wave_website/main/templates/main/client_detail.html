@@ -1,48 +1,48 @@
 {% extends 'main/base.html' %}
 {% block title %}Clients Detail Page{% endblock %}
 {% block content %}
-<h3 class="mt-3">{{ client.full_name }}</h3><br />
-<div class="card gap-3 mt-3">
-    <ul>
-        <li>Email: {{ client.email }}</li>
-        <li>Contact: {{ client.contact }}</li>
-        <li>Emergency Contact: {{ client.emergency_contact }}</li>
-    </ul>
-</div>
+<h3 class="mt-5">{{ client.full_name }}</h3><br />
+<div class="container-fluid">
+    <div class="container-fluid mt-3">
+        <ul>
+            <li>Email: {{ client.email }}</li>
+            <li>Contact: {{ client.contact }}</li>
+            <li>Emergency Contact: {{ client.emergency_contact }}</li>
+        </ul>
+    </div>
 
-<div class="card gap-3 mt-3">
-    <h5>Sessions</h5>
-    {% for session in sessions %}
-        <div class="container">
-            <ul>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            <h4>
-                                Session # {{ forloop.counter }}
-                            </h4>
-                        </div>
-                        <div class="card-text">
-                            Session Date: {{ session.session_date }}<br>
-                            Session Time: {{ session.session_time }}
-                            {% if session.transcripts %}
-                                <h5>Transcript</h5>
-                                {% for transcript in session.transcripts %}
-                                    <p>Transript Text: {{ transcript.content }}</p>
-                                {% endfor %}
-                            {% else %}
-                            <p>Transcripts not available.</p>
-                            {% endif %}
+    <div class="container-fluid m-0 mt-3 p-0">
+        <div class="row">
+            <div class="pt-3 pb-3 col-3">
+                {% for session in sessions %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h5>
+                                    Session # {{ forloop.counter }}
+                                </h5>
+                            </div>
                         </div>
                     </div>
+                {% endfor %}
+            </div>
+            <div class="pt-3 pb-3 col-6">
+                <div class="card-text">
+                    Session Date: {{ session.session_date }}<br>
+                    Session Time: {{ session.session_time }}
+                    {% if session.transcripts %}
+                        <h5>Transcript</h5>
+                        {% for transcript in session.transcripts %}
+                            <p>Transript Text: {{ transcript.content }}</p>
+                        {% endfor %}
+                    {% else %}
+                    <p>Transcripts not available.</p>
+                    {% endif %}
                 </div>
-            </ul>
+            </div>
+            <div class="col-3"></div>
         </div>
-    {% endfor %}
+    </div>
+    <a href="{% url 'new-session' client.id %}" class="btn btn-primary mt-3">Add new client session</a>
 </div>
-
-
-
-<a href="{% url 'new-session' client.id %}" class="btn btn-primary mt-3">Add new client session</a>
-
 {% endblock %}
