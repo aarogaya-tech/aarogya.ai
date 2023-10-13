@@ -6,6 +6,7 @@ class Patient(models.Model):
     email = models.EmailField()
     contact = models.CharField(max_length=24)
     emergency_contact = models.CharField(max_length=24)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __to_dict__(self):
         return {'full_name': self.full_name, 'id': self.id}
