@@ -41,4 +41,5 @@ def transcript_file_upload(instance, filename):
 
 class Transcript(models.Model):
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    text_file_url = models.FileField(upload_to=transcript_file_upload)
+    text_file_url = models.FileField(upload_to=transcript_file_upload, null=True)
+    audio_file_url = models.FileField(upload_to=transcript_file_upload, null=True)

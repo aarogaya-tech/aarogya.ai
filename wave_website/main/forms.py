@@ -51,6 +51,8 @@ class SessionNotesForm(forms.ModelForm):
         fields = ["repeated_lines", "psychologists_notes", "summary"]
 
 class TranscriptForm(forms.ModelForm):
+    text_file_url = forms.FileField(label="Upload Text Transcript", required=False)
+    audio_file_url = forms.FileField(label="Upload Audio Recording", required=False)
     class Meta:
         model = Transcript
-        fields = ["text_file_url"]
+        fields = ["text_file_url", "audio_file_url"]

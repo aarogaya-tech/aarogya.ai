@@ -112,7 +112,10 @@ def client_detail(request, client_id: int, session_id=None):
                 if session.user.username != logged_in_user.username:
                     raise Exception("User not authorized to access session")
                 transcript = session.transcript_set.all()[0]
-                transcript.content = transcript.text_file_url.file.read().decode('utf-8')
+                try:
+                    transcript.content = transcript.text_file_url.file.read().decode('utf-8')
+                except (ValueError):
+                    transcript = None
 
     except Patient.DoesNotExist:
         raise Http404("Patient does not exist.")
