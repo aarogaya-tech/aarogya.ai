@@ -3,42 +3,86 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row gap-3">
-        <div class="col-2 mt-5">
-            <h5 class="mb-3">Clients</h5>
+        <div class="col-2 mt-5" style="border-right: 3px solid #A38F86;padding-right: 1.5rem">
+            <h5 class="mb-3 text-lato p-3" style="background: #D4B2A7BF; border-radius: 1rem;">CLIENT LIST</h5>
             {% for client in clients %}
-                <a href="/client/{{ client.id }}">
-                    {{ client.full_name }}
-                </a> <br />
+                <div class="row client-card">
+                    <a href="/client/{{ client.id }}">
+                        {{ client.full_name }}
+                    </a> 
+                </div>
             {% endfor %}
         </div>
         <div class="col-9 mt-5">
-            <h5 class="mb-3">Sessions</h5>
-            <p class="text-muted">TODAY</p>
-            {% for session in today_sessions %}
-                <a href="client/{{session.client_id}}/session/{{session.session_id}}">
-                    {{ session.client_name }}
-                    {{ session.session_date }}
-                    {{ session.session_time }}
-                </a>
-            {% endfor %}
-            <p class="text-muted mt-5">UPCOMING</p>
-            {% for session in upcoming_sessions %}
-                <a href="client/{{session.client_id}}/session/{{session.session_id}}">
-                    {{ session.client_name }}
-                    {{ session.session_date }}
-                    {{ session.session_time }}
-                </a>
-            {% endfor %}
-            <p class="text-muted mt-5">PAST</p>
-            {% for session in past_sessions %}
-                <a href="client/{{session.client_id}}/session/{{session.session_id}}">
-                    <div class="card-body">
-                        {{ session.client_name }}
-                        {{ session.session_date }}
-                        {{ session.session_time }}
+            <h5 class="mb-3 text-lato p-3" style="background: #D4B2A7BF; border-radius: 1rem;">ALL SESSIONS</h5>
+            <div class="accordion mb-3" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" style="background: #EDEAE3;" id="today_sessions">
+                    <button class="accordion-button" style="background: #EDEAE3;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      TODAY
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        {% for session in today_sessions %}
+                        <div class="row session-card" style="background: white">
+                            <a href="client/{{session.client_id}}/session/{{session.session_id}}">
+                                {{ session.client_name }}
+                                {{ session.session_date }}
+                                {{ session.session_time }}
+                            </a>
+                        </div>
+                    {% endfor %}
                     </div>
-                </a>
-            {% endfor %}
+                  </div>
+                </div>
+            </div>
+
+            <div class="accordion mb-3" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" style="background: #EDEAE3;" id="upcoming_sessions">
+                    <button class="accordion-button" style="background: #EDEAE3;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                      UPCOMING
+                    </button>
+                  </h2>
+                  <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        {% for session in upcoming_sessions %}
+                        <div class="row session-card" style="background: white">
+                            <a href="client/{{session.client_id}}/session/{{session.session_id}}">
+                                {{ session.client_name }}
+                                {{ session.session_date }}
+                                {{ session.session_time }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="accordion mb-3" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" style="background: #EDEAE3;" id="past_sessions">
+                    <button class="accordion-button" style="background: #EDEAE3;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                      PAST
+                    </button>
+                  </h2>
+                  <div id="collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        {% for session in past_sessions %}
+                        <div class="row session-card" style="background: white">
+                            <a href="client/{{session.client_id}}/session/{{session.session_id}}">
+                                {{ session.client_name }}
+                                {{ session.session_date }}
+                                {{ session.session_time }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
