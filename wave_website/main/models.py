@@ -23,9 +23,11 @@ class Session(models.Model):
 
 
 class SessionNote(models.Model):
-    repeated_lines = models.CharField(max_length=1000)
-    psychologists_notes = models.CharField(max_length=1000)
-    summary = models.CharField(max_length=1000)
+    client_history = models.CharField(max_length=1000, null=True)
+    repeated_lines = models.CharField(max_length=1000, null=True)
+    psychologists_notes = models.CharField(max_length=1000, null=True)
+    summary = models.CharField(max_length=1000, null=True)
+    diagnosis = models.CharField(max_length=1000, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
 

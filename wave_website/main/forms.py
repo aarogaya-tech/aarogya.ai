@@ -52,13 +52,35 @@ class SessionForm(forms.ModelForm):
 
 
 class SessionNotesForm(forms.ModelForm):
-    repeated_lines = forms.CharField(widget=forms.Textarea(attrs={'rows': 2}), label="Repeated Lines")
-    psychologists_notes = forms.CharField(widget=forms.Textarea(attrs={'rows': 2}), label="Psychologist's Notes")
-    summary = forms.CharField(widget=forms.Textarea(attrs={'rows': 2}), label="Summary")
+    client_history = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 3}),
+        label="Client History", 
+        required=False
+    )
+    repeated_lines = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 2}),
+        label="Repeated Lines", 
+        required=False
+    )
+    psychologists_notes = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 2}),
+        label="Psychologist's Notes", 
+        required=False
+    )
+    summary = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 2}),
+        label="Summary",
+        required=False
+    )
+    diagnosis = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 3}),
+        label="Diagnosis",
+        required=False
+    )
 
     class Meta:
         model = SessionNote
-        fields = ["repeated_lines", "psychologists_notes", "summary"]
+        fields = ["client_history", "repeated_lines", "psychologists_notes", "summary", "diagnosis"]
 
 class TranscriptForm(forms.ModelForm):
     text_file_url = forms.FileField(label="Upload Text Transcript", required=False)
