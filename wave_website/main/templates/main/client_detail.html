@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 {% block title %}Clients Detail Page{% endblock %}
 {% block content %}
-<h3 class="mt-5">{{ client.full_name }}</h3><br />
+<h3 class="mt-5 p-3" style="background: #D4B2A7BF; border-radius: 1rem;">{{ client.full_name }}</h3><br />
 <div class="container-fluid">
     <div class="container-fluid mt-3">
         <ul>
@@ -14,23 +14,19 @@
 
     <div class="container-fluid m-0 mt-3 p-0">
         <div class="row">
-            <div class="pt-3 pb-3 col-2">
+            <div class="col-2 mt-5" style="border-right: 3px solid #A38F86;padding-right: 1.5rem">
+                <h5 class="mb-3 text-lato p-3" style="background: #D4B2A7BF; border-radius: 1rem;">TIMELINE</h5>
                 {% for session in sessions %}
                     <a href={% url 'client-detail-with-transcript' client_id=client.id session_id=session.id %}>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-title">
-                                    <h5>
-                                        Session # {{ forloop.counter }}
-                                    </h5>
-                                </div>
-                            </div>
+                        <div class="client-card">
+                            Session # {{ forloop.counter }}
                         </div>
                     </a>
                 {% endfor %}
                 <a href="{% url 'new-session' client.id %}" class="btn btn-primary mt-3">Add new client session</a>
             </div>
-            <div class="pt-3 pb-3 col-7">
+            <div class="col-7 mt-5" style="border-right: 3px solid #A38F86;padding-right: 1.5rem">
+                <h5 class="mb-3 text-lato p-3" style="background: #D4B2A7BF; border-radius: 1rem;">TRANSCRIPT</h5>
                 <div class="card-text">
                     Session Date: {{ session.session_date }}<br>
                     Session Time: {{ session.session_time }}
@@ -50,7 +46,8 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-3 mt-5" style="padding-right: 1.5rem">
+                <h5 class="mb-3 text-lato p-3" style="background: #D4B2A7BF; border-radius: 1rem;">SESSION DETAILS</h5>
                 {% load crispy_forms_tags %}
                 <form method="post">
                     {% csrf_token %}{{session_notes|crispy}}

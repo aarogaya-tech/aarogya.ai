@@ -14,7 +14,7 @@ from celery.result import AsyncResult
 @login_required()
 def home(request):
     patient_count: AsyncResult = count_patients.delay()
-    
+
     all_clients = Patient.objects.filter(user=request.user)
     all_sessions = Session.objects.filter(user=request.user)
     today = []
@@ -101,10 +101,13 @@ def client_detail(request, client_id: int, session_id=None):
         session = None
         note = None
         if session_id is not None:
-            session = Session.objects.get(id=session_id)
+            session = Session.objects.filter(id=session_id)[0]
             try:
-                note = None if SessionNote.objects.count() == 0 \
-                    else SessionNote.objects.get(session=session)
+                note = None
+                if SessionNote.objects.count() > 0:
+                    notes = SessionNote.objects.filter(session=session)
+                    if len(notes) > 0:
+                        note = list(SessionNote.objects.filter(session=session))[-1]
             except SessionNote.DoesNotExist:
                 note = None
 
