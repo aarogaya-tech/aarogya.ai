@@ -2,16 +2,19 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, PatientForm, SessionForm, SessionNotesForm, TranscriptForm
 from .models import Patient, Session, SessionNote
+from .tasks import count_patients
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.urls import reverse
 from django.contrib.auth.models import User
+from celery.result import AsyncResult
 # Create your views here.
-
 
 @login_required()
 def home(request):
+    patient_count: AsyncResult = count_patients.delay()
+    
     all_clients = Patient.objects.filter(user=request.user)
     all_sessions = Session.objects.filter(user=request.user)
     today = []
