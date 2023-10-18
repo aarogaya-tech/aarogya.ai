@@ -24,11 +24,21 @@ class PatientForm(forms.Form):
     full_name = forms.CharField(label="Full name", max_length=511)
     email = forms.EmailField(label="Email")
     contact = forms.CharField(label="Contact", max_length=24)
-    emergency_contact = forms.CharField(label="Emergency Contact", max_length=24)
+    address = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 2}),
+        label="Address",
+        max_length=1000,
+        required=False
+    )
+    education = forms.CharField(
+        label="Highest education level attained",
+        max_length=511, 
+        required=False
+    )
 
     class Meta:
         model = Patient
-        fields = ["full_name", "email", "contact", "emergency_contact"]
+        fields = ["full_name", "email", "contact", "emergency_contact", "address", "education"]
 
 
 class SessionForm(forms.ModelForm):

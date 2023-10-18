@@ -104,7 +104,7 @@ def client_detail(request, client_id: int, session_id=None):
                     else SessionNote.objects.get(session=session)
             except SessionNote.DoesNotExist:
                 note = None
-            print(note)
+
             if note:
                 session_notes_form = SessionNotesForm(instance=note)
 
@@ -114,7 +114,7 @@ def client_detail(request, client_id: int, session_id=None):
                 transcript = session.transcript_set.all()[0]
                 try:
                     transcript.content = transcript.text_file_url.file.read().decode('utf-8')
-                except (ValueError):
+                except ValueError:
                     transcript = None
 
     except Patient.DoesNotExist:
