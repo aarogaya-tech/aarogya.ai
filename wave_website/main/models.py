@@ -5,7 +5,8 @@ class Patient(models.Model):
     full_name = models.CharField(max_length=511)
     email = models.EmailField()
     contact = models.CharField(max_length=24)
-    emergency_contact = models.CharField(max_length=24)
+    address = models.CharField(max_length=1000, null=True)
+    education = models.CharField(max_length=511, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __to_dict__(self):
@@ -44,3 +45,4 @@ class Transcript(models.Model):
     text_file_url = models.FileField(upload_to=transcript_file_upload, null=True)
     audio_file_url = models.FileField(upload_to=transcript_file_upload, null=True)
     generated_transcript = models.FileField(upload_to=transcript_file_upload, null=True)
+    transcript_generation_in_progress = models.BooleanField(default=True)
