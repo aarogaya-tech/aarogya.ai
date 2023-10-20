@@ -32,7 +32,7 @@ class PatientForm(forms.Form):
     )
     education = forms.CharField(
         label="Highest education level attained",
-        max_length=511, 
+        max_length=511,
         required=False
     )
 

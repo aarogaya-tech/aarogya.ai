@@ -2,19 +2,16 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, PatientForm, SessionForm, SessionNotesForm, TranscriptForm
 from .models import Patient, Session, SessionNote
-from .tasks import count_patients
+from .tasks import transcribe_audio
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.urls import reverse
 from django.contrib.auth.models import User
-from celery.result import AsyncResult
 # Create your views here.
 
 @login_required()
 def home(request):
-    patient_count: AsyncResult = count_patients.delay()
-
     all_clients = Patient.objects.filter(user=request.user)
     all_sessions = Session.objects.filter(user=request.user)
     today = []
@@ -120,6 +117,7 @@ def client_detail(request, client_id: int, session_id=None):
                 transcript = session.transcript_set.all()[0]
                 try:
                     transcript.content = transcript.text_file_url.file.read().decode('utf-8')
+                    transcript.generated = transcript.generated_transcript
                 except ValueError:
                     transcript = None
 
@@ -151,6 +149,9 @@ def new_client_session(request, client_id: int):
             client_session.save()
             transcript_form.instance.session = client_session
             transcript_form.save()
+            if request.FILES["audio_file_url"]:
+                # transcribe_audio.delay(request.FILES["audio_file_url"].read(), transcript_form.instance.id)
+                transcribe_audio(transcript_form.instance.id)
             return redirect(
                 reverse("client-detail", kwargs={"client_id": client_session.patient.id})
             )
